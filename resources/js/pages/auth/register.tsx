@@ -2,11 +2,10 @@ import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
-import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { TextField } from '@/components/ui/text-field';
+import { Label } from '@/components/ui/field';
 import AuthLayout from '@/layouts/auth-layout';
 
 type RegisterForm = {
@@ -38,70 +37,72 @@ export default function Register() {
                 <div className="grid gap-6">
                     <div className="grid gap-2">
                         <Label htmlFor="name">Name</Label>
-                        <Input
+                        <TextField
                             id="name"
                             type="text"
-                            required
+                            isRequired
                             autoFocus
-                            tabIndex={1}
                             autoComplete="name"
                             value={data.name}
-                            onChange={(e) => setData('name', e.target.value)}
-                            disabled={processing}
+                            onChange={(value) => setData('name', value)}
+                            isDisabled={processing}
                             placeholder="Full name"
+                            errorMessage={errors.name}
                         />
-                        <InputError message={errors.name} className="mt-2" />
                     </div>
 
                     <div className="grid gap-2">
                         <Label htmlFor="email">Email address</Label>
-                        <Input
+                        <TextField
                             id="email"
                             type="email"
-                            required
-                            tabIndex={2}
+                            isRequired
                             autoComplete="email"
                             value={data.email}
-                            onChange={(e) => setData('email', e.target.value)}
-                            disabled={processing}
+                            onChange={(value) => setData('email', value)}
+                            isDisabled={processing}
                             placeholder="email@example.com"
+                            errorMessage={errors.email}
                         />
-                        <InputError message={errors.email} />
                     </div>
 
                     <div className="grid gap-2">
                         <Label htmlFor="password">Password</Label>
-                        <Input
+                        <TextField
                             id="password"
                             type="password"
-                            required
-                            tabIndex={3}
+                            isRequired
+                            isRevealable
                             autoComplete="new-password"
                             value={data.password}
-                            onChange={(e) => setData('password', e.target.value)}
-                            disabled={processing}
+                            onChange={(value) => setData('password', value)}
+                            isDisabled={processing}
                             placeholder="Password"
+                            errorMessage={errors.password}
                         />
-                        <InputError message={errors.password} />
                     </div>
 
                     <div className="grid gap-2">
                         <Label htmlFor="password_confirmation">Confirm password</Label>
-                        <Input
+                        <TextField
                             id="password_confirmation"
                             type="password"
-                            required
-                            tabIndex={4}
+                            isRequired
+                            isRevealable
                             autoComplete="new-password"
                             value={data.password_confirmation}
-                            onChange={(e) => setData('password_confirmation', e.target.value)}
-                            disabled={processing}
+                            onChange={(value) => setData('password_confirmation', value)}
+                            isDisabled={processing}
                             placeholder="Confirm password"
+                            errorMessage={errors.password_confirmation}
                         />
-                        <InputError message={errors.password_confirmation} />
                     </div>
 
-                    <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>
+                    <Button
+                        type="submit"
+                        className="mt-2 w-full"
+                        isDisabled={processing}
+                    >
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Create account
                     </Button>

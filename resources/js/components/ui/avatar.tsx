@@ -1,51 +1,66 @@
-import * as React from "react"
-import * as AvatarPrimitive from "@radix-ui/react-avatar"
+import { type VariantProps, tv } from "tailwind-variants"
 
-import { cn } from "@/lib/utils"
+const avatar = tv({
+  base: [
+    "inline-grid shrink-0 align-middle [--avatar-radius:20%] [--ring-opacity:20%] *:col-start-1 *:row-start-1",
+    "-outline-offset-1 outline-1 outline-fg/(--ring-opacity)",
+  ],
+  variants: {
+    shape: {
+      square: "rounded-(--avatar-radius) *:rounded-(--avatar-radius)",
+      circle: "rounded-full *:rounded-full",
+    },
+    size: {
+      "extra-small": "size-5 *:size-5",
+      small: "size-6 *:size-6",
+      medium: "size-8 *:size-8",
+      large: "size-10 *:size-10",
+      "extra-large": "size-12 *:size-12",
+    },
+  },
+})
 
-function Avatar({
+interface AvatarProps extends VariantProps<typeof avatar> {
+  src?: string | null
+  initials?: string
+  alt?: string
+  className?: string
+}
+
+const Avatar = ({
+  src = null,
+  shape = "circle",
+  size = "medium",
+  initials,
+  alt = "",
   className,
   ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Root>) {
+}: AvatarProps & React.ComponentPropsWithoutRef<"span">) => {
   return (
-    <AvatarPrimitive.Root
-      data-slot="avatar"
-      className={cn(
-        "relative flex size-8 shrink-0 overflow-hidden rounded-full",
-        className
+    <span data-slot="avatar" {...props} className={avatar({ shape, size, className })}>
+      {initials && (
+        <svg
+          className="size-full select-none fill-current p-[5%] font-medium text-[48px] uppercase"
+          viewBox="0 0 100 100"
+          aria-hidden={alt ? undefined : "true"}
+        >
+          {alt && <title>{alt}</title>}
+          <text
+            x="50%"
+            y="50%"
+            alignmentBaseline="middle"
+            dominantBaseline="middle"
+            textAnchor="middle"
+            dy=".125em"
+          >
+            {initials}
+          </text>
+        </svg>
       )}
-      {...props}
-    />
+      {src && <img className="size-full" src={src} alt={alt} />}
+    </span>
   )
 }
 
-function AvatarImage({
-  className,
-  ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Image>) {
-  return (
-    <AvatarPrimitive.Image
-      data-slot="avatar-image"
-      className={cn("aspect-square size-full", className)}
-      {...props}
-    />
-  )
-}
-
-function AvatarFallback({
-  className,
-  ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {
-  return (
-    <AvatarPrimitive.Fallback
-      data-slot="avatar-fallback"
-      className={cn(
-        "bg-muted flex size-full items-center justify-center rounded-full",
-        className
-      )}
-      {...props}
-    />
-  )
-}
-
-export { Avatar, AvatarImage, AvatarFallback }
+export type { AvatarProps }
+export { Avatar }

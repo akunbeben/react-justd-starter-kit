@@ -2,12 +2,11 @@ import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
-import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { TextField } from '@/components/ui/text-field';
+import { Label } from '@/components/ui/field';
 import AuthLayout from '@/layouts/auth-layout';
 
 type LoginForm = {
@@ -43,18 +42,17 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                 <div className="grid gap-6">
                     <div className="grid gap-2">
                         <Label htmlFor="email">Email address</Label>
-                        <Input
+                        <TextField
                             id="email"
                             type="email"
-                            required
+                            isRequired
                             autoFocus
-                            tabIndex={1}
                             autoComplete="email"
                             value={data.email}
-                            onChange={(e) => setData('email', e.target.value)}
+                            onChange={(value) => setData('email', value)}
                             placeholder="email@example.com"
+                            errorMessage={errors.email}
                         />
-                        <InputError message={errors.email} />
                     </div>
 
                     <div className="grid gap-2">
@@ -66,31 +64,34 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 </TextLink>
                             )}
                         </div>
-                        <Input
+                        <TextField
                             id="password"
                             type="password"
-                            required
-                            tabIndex={2}
                             autoComplete="current-password"
                             value={data.password}
-                            onChange={(e) => setData('password', e.target.value)}
+                            onChange={(value) => setData('password', value)}
                             placeholder="Password"
+                            errorMessage={errors.password}
+                            isRequired
+                            isRevealable
                         />
-                        <InputError message={errors.password} />
                     </div>
 
                     <div className="flex items-center space-x-3">
                         <Checkbox
                             id="remember"
                             name="remember"
-                            checked={data.remember}
-                            onClick={() => setData('remember', !data.remember)}
-                            tabIndex={3}
+                            isSelected={data.remember}
+                            onChange={(value: boolean) => setData('remember', value)}
                         />
                         <Label htmlFor="remember">Remember me</Label>
                     </div>
 
-                    <Button type="submit" className="mt-4 w-full" tabIndex={4} disabled={processing}>
+                    <Button
+                        type="submit"
+                        className="mt-4 w-full"
+                        isDisabled={processing}
+                    >
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Log in
                     </Button>

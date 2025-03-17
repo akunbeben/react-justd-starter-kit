@@ -1,59 +1,92 @@
-import * as React from "react"
-import * as TooltipPrimitive from "@radix-ui/react-tooltip"
+import type { TooltipProps as TooltipPrimitiveProps } from "react-aria-components"
+import {
+  Button,
+  OverlayArrow,
+  Tooltip as TooltipPrimitive,
+  TooltipTrigger as TooltipTriggerPrimitive,
+  composeRenderProps,
+} from "react-aria-components"
+import type { VariantProps } from "tailwind-variants"
+import { tv } from "tailwind-variants"
 
-import { cn } from "@/lib/utils"
+const tooltipStyles = tv({
+  base: [
+    "group rounded-lg border px-2.5 py-1.5 text-sm will-change-transform dark:shadow-none [&_strong]:font-medium",
+  ],
+  variants: {
+    intent: {
+      default: "bg-overlay text-overlay-fg [&_.arx]:fill-overlay [&_.arx]:stroke-border",
+      inverse:
+        "border-transparent bg-fg text-bg [&_.arx]:fill-fg [&_.arx]:stroke-transparent dark:[&_.arx]:fill-white [&_.text-muted-fg]:text-bg/70 dark:[&_.text-muted-fg]:text-fg/70",
+    },
+    isEntering: {
+      true: [
+        "fade-in animate-in",
+        "data-[placement=left]:slide-in-from-right-1 data-[placement=right]:slide-in-from-left-1 data-[placement=top]:slide-in-from-bottom-1 data-[placement=bottom]:slide-in-from-top-1",
+      ],
+    },
+    isExiting: {
+      true: [
+        "fade-in direction-reverse animate-in",
+        "data-[placement=left]:slide-out-to-right-1 data-[placement=right]:slide-out-to-left-1 data-[placement=top]:slide-out-to-bottom-1 data-[placement=bottom]:slide-out-to-top-1",
+      ],
+    },
+  },
+  defaultVariants: {
+    intent: "default",
+  },
+})
 
-function TooltipProvider({
-  delayDuration = 0,
-  ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Provider>) {
-  return (
-    <TooltipPrimitive.Provider
-      data-slot="tooltip-provider"
-      delayDuration={delayDuration}
-      {...props}
-    />
-  )
+type TooltipProps = React.ComponentProps<typeof TooltipTriggerPrimitive>
+const Tooltip = (props: TooltipProps) => <TooltipTriggerPrimitive {...props} />
+
+interface TooltipContentProps
+  extends Omit<TooltipPrimitiveProps, "children">,
+    VariantProps<typeof tooltipStyles> {
+  showArrow?: boolean
+  children: React.ReactNode
 }
 
-function Tooltip({
-  ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Root>) {
-  return (
-    <TooltipProvider>
-      <TooltipPrimitive.Root data-slot="tooltip" {...props} />
-    </TooltipProvider>
-  )
-}
-
-function TooltipTrigger({
-  ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
-  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
-}
-
-function TooltipContent({
-  className,
-  sideOffset = 4,
+const TooltipContent = ({
+  offset = 10,
+  showArrow = true,
+  intent = "default",
   children,
   ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Content>) {
+}: TooltipContentProps) => {
   return (
-    <TooltipPrimitive.Portal>
-      <TooltipPrimitive.Content
-        data-slot="tooltip-content"
-        sideOffset={sideOffset}
-        className={cn(
-          "bg-primary text-primary-foreground animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 max-w-sm rounded-md px-3 py-1.5 text-xs",
-          className
-        )}
-        {...props}
-      >
-        {children}
-        <TooltipPrimitive.Arrow className="bg-primary fill-primary z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
-      </TooltipPrimitive.Content>
-    </TooltipPrimitive.Portal>
+    <TooltipPrimitive
+      {...props}
+      offset={offset}
+      className={composeRenderProps(props.className, (className, renderProps) =>
+        tooltipStyles({
+          ...renderProps,
+          intent,
+          className,
+        }),
+      )}
+    >
+      {showArrow && (
+        <OverlayArrow>
+          <svg
+            width={12}
+            height={12}
+            viewBox="0 0 12 12"
+            className="arx group-data-[placement=left]:-rotate-90 group-data-[placement=bottom]:rotate-180 group-data-[placement=right]:rotate-90 forced-colors:fill-[Canvas] forced-colors:stroke-[ButtonBorder]"
+          >
+            <path d="M0 0 L6 6 L12 0" />
+          </svg>
+        </OverlayArrow>
+      )}
+      {children}
+    </TooltipPrimitive>
   )
 }
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
+const TooltipTrigger = Button
+
+Tooltip.Trigger = TooltipTrigger
+Tooltip.Content = TooltipContent
+
+export type { TooltipProps, TooltipContentProps }
+export { Tooltip }
