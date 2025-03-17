@@ -48,6 +48,7 @@ export default function Register() {
                             isDisabled={processing}
                             placeholder="Full name"
                             errorMessage={errors.name}
+                            aria-label="Full name"
                         />
                     </div>
 
@@ -63,6 +64,7 @@ export default function Register() {
                             isDisabled={processing}
                             placeholder="email@example.com"
                             errorMessage={errors.email}
+                            aria-label="Email address"
                         />
                     </div>
 
@@ -79,6 +81,7 @@ export default function Register() {
                             isDisabled={processing}
                             placeholder="Password"
                             errorMessage={errors.password}
+                            aria-label="Password"
                         />
                     </div>
 
@@ -95,6 +98,7 @@ export default function Register() {
                             isDisabled={processing}
                             placeholder="Confirm password"
                             errorMessage={errors.password_confirmation}
+                            aria-label="Password Confirmation"
                         />
                     </div>
 

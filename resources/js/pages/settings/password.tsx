@@ -4,12 +4,13 @@ import SettingsLayout from '@/layouts/settings/layout';
 import { type BreadcrumbItem } from '@/types';
 import { Transition } from '@headlessui/react';
 import { Head, useForm } from '@inertiajs/react';
-import { FormEventHandler, useRef } from 'react';
+import { FormEventHandler, useRef, useState } from 'react';
 
 import HeadingSmall from '@/components/heading-small';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { TextField } from '@/components/ui/text-field';
+import { Label } from '@/components/ui/field';
+import { Form } from '@/components/ui';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -56,59 +57,61 @@ export default function Password() {
                 <div className="space-y-6">
                     <HeadingSmall title="Update password" description="Ensure your account is using a long, random password to stay secure" />
 
-                    <form onSubmit={updatePassword} className="space-y-6">
+                    <Form onSubmit={updatePassword} className="space-y-6">
                         <div className="grid gap-2">
                             <Label htmlFor="current_password">Current password</Label>
 
-                            <Input
+                            <TextField
                                 id="current_password"
-                                ref={currentPasswordInput}
                                 value={data.current_password}
-                                onChange={(e) => setData('current_password', e.target.value)}
+                                onChange={(value) => setData('current_password', value)}
                                 type="password"
                                 className="mt-1 block w-full"
                                 autoComplete="current-password"
                                 placeholder="Current password"
+                                errorMessage={errors.current_password}
+                                aria-label="Current password"
                             />
 
-                            <InputError message={errors.current_password} />
+                            {errors.current_password && <InputError message={errors.current_password} />}
                         </div>
 
                         <div className="grid gap-2">
                             <Label htmlFor="password">New password</Label>
 
-                            <Input
+                            <TextField
                                 id="password"
-                                ref={passwordInput}
                                 value={data.password}
-                                onChange={(e) => setData('password', e.target.value)}
+                                onChange={(value) => setData('password', value)}
                                 type="password"
                                 className="mt-1 block w-full"
                                 autoComplete="new-password"
                                 placeholder="New password"
+                                errorMessage={errors.password}
+                                aria-label="New password"
                             />
 
-                            <InputError message={errors.password} />
+                            {errors.password && <InputError message={errors.password} />}
                         </div>
 
                         <div className="grid gap-2">
                             <Label htmlFor="password_confirmation">Confirm password</Label>
 
-                            <Input
+                            <TextField
                                 id="password_confirmation"
                                 value={data.password_confirmation}
-                                onChange={(e) => setData('password_confirmation', e.target.value)}
+                                onChange={(value) => setData('password_confirmation', value)}
                                 type="password"
                                 className="mt-1 block w-full"
                                 autoComplete="new-password"
                                 placeholder="Confirm password"
+                                errorMessage={errors.password_confirmation}
+                                aria-label="Confirm password"
                             />
-
-                            <InputError message={errors.password_confirmation} />
                         </div>
 
                         <div className="flex items-center gap-4">
-                            <Button disabled={processing}>Save password</Button>
+                            <Button isDisabled={processing} type="submit" isPending={processing}>Save password</Button>
 
                             <Transition
                                 show={recentlySuccessful}
@@ -120,7 +123,7 @@ export default function Password() {
                                 <p className="text-sm text-neutral-600">Saved</p>
                             </Transition>
                         </div>
-                    </form>
+                    </Form>
                 </div>
             </SettingsLayout>
         </AppLayout>

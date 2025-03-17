@@ -52,6 +52,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             onChange={(value) => setData('email', value)}
                             placeholder="email@example.com"
                             errorMessage={errors.email}
+                            aria-label="Email address"
                         />
                     </div>
 
@@ -67,13 +68,14 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                         <TextField
                             id="password"
                             type="password"
+                            isRequired
+                            isRevealable
                             autoComplete="current-password"
                             value={data.password}
                             onChange={(value) => setData('password', value)}
                             placeholder="Password"
                             errorMessage={errors.password}
-                            isRequired
-                            isRevealable
+                            aria-label="Password"
                         />
                     </div>
 

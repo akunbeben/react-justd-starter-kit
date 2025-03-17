@@ -1,14 +1,13 @@
 import { useForm } from '@inertiajs/react';
 import { FormEventHandler, useRef } from 'react';
 
-import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { TextField } from '@/components/ui/text-field';
+import { Label } from '@/components/ui/field';
+import { Modal } from '@/components/ui/modal';
 
 import HeadingSmall from '@/components/heading-small';
-
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Form } from './ui';
 
 export default function DeleteUser() {
     const passwordInput = useRef<HTMLInputElement>(null);
@@ -39,50 +38,44 @@ export default function DeleteUser() {
                     <p className="text-sm">Please proceed with caution, this cannot be undone.</p>
                 </div>
 
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <Button variant="destructive">Delete account</Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogTitle>Are you sure you want to delete your account?</DialogTitle>
-                        <DialogDescription>
-                            Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your password
-                            to confirm you would like to permanently delete your account.
-                        </DialogDescription>
-                        <form className="space-y-6" onSubmit={deleteUser}>
-                            <div className="grid gap-2">
-                                <Label htmlFor="password" className="sr-only">
-                                    Password
-                                </Label>
+                <Modal>
+                    <Button intent="danger">Delete account</Button>
+                    <Modal.Content isBlurred>
+                        <Modal.Header>
+                            <Modal.Title>Are you sure you want to delete your account?</Modal.Title>
+                            <Modal.Description>
+                                Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your password
+                                to confirm you would like to permanently delete your account.
+                            </Modal.Description>
+                        </Modal.Header>
+                        <Form onSubmit={deleteUser}>
+                            <Modal.Body>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="password" className="sr-only">
+                                        Password
+                                    </Label>
 
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    name="password"
-                                    ref={passwordInput}
-                                    value={data.password}
-                                    onChange={(e) => setData('password', e.target.value)}
-                                    placeholder="Password"
-                                    autoComplete="current-password"
-                                />
-
-                                <InputError message={errors.password} />
-                            </div>
-
-                            <DialogFooter className="gap-2">
-                                <DialogClose asChild>
-                                    <Button variant="secondary" onClick={closeModal}>
-                                        Cancel
-                                    </Button>
-                                </DialogClose>
-
-                                <Button variant="destructive" disabled={processing} asChild>
-                                    <button type="submit">Delete account</button>
-                                </Button>
-                            </DialogFooter>
-                        </form>
-                    </DialogContent>
-                </Dialog>
+                                    <TextField
+                                        id="password"
+                                        type="password"
+                                        isRequired
+                                        isRevealable
+                                        value={data.password}
+                                        onChange={(value) => setData('password', value)}
+                                        isDisabled={processing}
+                                        placeholder="Password"
+                                        errorMessage={errors.password}
+                                        aria-label="Password"
+                                    />
+                                </div>
+                            </Modal.Body>
+                            <Modal.Footer className="justify-end">
+                                <Modal.Close>Cancel</Modal.Close>
+                                <Button intent="danger" type="submit">Delete Account</Button>
+                            </Modal.Footer>
+                        </Form>
+                    </Modal.Content>
+                </Modal>
             </div>
         </div>
     );

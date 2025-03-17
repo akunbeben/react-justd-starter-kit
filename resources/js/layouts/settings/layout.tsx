@@ -1,9 +1,9 @@
 import Heading from '@/components/heading';
-import { Button } from '@/components/ui/button';
+import { Button, buttonStyles } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
+import { Link } from '@/components/ui/link';
 import { type PropsWithChildren } from 'react';
 
 const sidebarNavItems: NavItem[] = [
@@ -40,19 +40,17 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                 <aside className="w-full max-w-xl lg:w-48">
                     <nav className="flex flex-col space-y-1 space-x-0">
                         {sidebarNavItems.map((item) => (
-                            <Button
+                            <Link
                                 key={item.href}
-                                size="sm"
-                                variant="ghost"
-                                asChild
-                                className={cn('w-full justify-start', {
-                                    'bg-muted': currentPath === item.href,
+                                href={item.href}
+                                className={(renderProps) => buttonStyles({
+                                    ...renderProps, intent: "plain", className: cn('w-full justify-start', {
+                                        'bg-muted': currentPath === item.href,
+                                    })
                                 })}
                             >
-                                <Link href={item.href} prefetch>
-                                    {item.title}
-                                </Link>
-                            </Button>
+                                {item.title}
+                            </Link>
                         ))}
                     </nav>
                 </aside>

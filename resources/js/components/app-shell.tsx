@@ -1,5 +1,7 @@
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { router } from "@inertiajs/react"
 import { useState } from 'react';
+import { RouterProvider } from 'react-aria-components';
 
 interface AppShellProps {
     children: React.ReactNode;
@@ -22,8 +24,10 @@ export function AppShell({ children, variant = 'header' }: AppShellProps) {
     }
 
     return (
-        <SidebarProvider defaultOpen={isOpen} open={isOpen} onOpenChange={handleSidebarChange}>
-            {children}
-        </SidebarProvider>
+        <RouterProvider navigate={(to, options) => router.visit(to, options)}>
+            <SidebarProvider defaultOpen={isOpen} isOpen={isOpen} onOpenChange={handleSidebarChange}>
+                {children}
+            </SidebarProvider>
+        </RouterProvider>
     );
 }

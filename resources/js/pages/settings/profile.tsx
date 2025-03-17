@@ -5,12 +5,12 @@ import { FormEventHandler } from 'react';
 
 import DeleteUser from '@/components/delete-user';
 import HeadingSmall from '@/components/heading-small';
-import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { TextField } from '@/components/ui/text-field';
+import { Label } from '@/components/ui/field';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import { Form } from '@/components/ui';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -48,38 +48,40 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                 <div className="space-y-6">
                     <HeadingSmall title="Profile information" description="Update your name and email address" />
 
-                    <form onSubmit={submit} className="space-y-6">
+                    <Form onSubmit={submit} className="space-y-6">
                         <div className="grid gap-2">
                             <Label htmlFor="name">Name</Label>
 
-                            <Input
+                            <TextField
                                 id="name"
-                                className="mt-1 block w-full"
-                                value={data.name}
-                                onChange={(e) => setData('name', e.target.value)}
-                                required
+                                type="text"
+                                isRequired
+                                autoFocus
                                 autoComplete="name"
+                                value={data.name}
+                                onChange={(value) => setData('name', value)}
+                                isDisabled={processing}
                                 placeholder="Full name"
+                                errorMessage={errors.name}
+                                aria-label="Full name"
                             />
-
-                            <InputError className="mt-2" message={errors.name} />
                         </div>
 
                         <div className="grid gap-2">
                             <Label htmlFor="email">Email address</Label>
 
-                            <Input
+                            <TextField
                                 id="email"
                                 type="email"
-                                className="mt-1 block w-full"
+                                isRequired
+                                autoComplete="email"
                                 value={data.email}
-                                onChange={(e) => setData('email', e.target.value)}
-                                required
-                                autoComplete="username"
-                                placeholder="Email address"
+                                onChange={(value) => setData('email', value)}
+                                isDisabled={processing}
+                                placeholder="email@example.com"
+                                errorMessage={errors.email}
+                                aria-label="Email address"
                             />
-
-                            <InputError className="mt-2" message={errors.email} />
                         </div>
 
                         {mustVerifyEmail && auth.user.email_verified_at === null && (
@@ -105,7 +107,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                         )}
 
                         <div className="flex items-center gap-4">
-                            <Button disabled={processing}>Save</Button>
+                            <Button isDisabled={processing} isPending={processing} type="submit">Save</Button>
 
                             <Transition
                                 show={recentlySuccessful}
@@ -117,7 +119,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                 <p className="text-sm text-neutral-600">Saved</p>
                             </Transition>
                         </div>
-                    </form>
+                    </Form>
                 </div>
 
                 <DeleteUser />
