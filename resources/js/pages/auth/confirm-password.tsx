@@ -5,8 +5,9 @@ import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { TextField } from '@/components/ui/text-field';
+import { Label } from '@/components/ui/field';
+import { Form } from '@/components/ui';
 import AuthLayout from '@/layouts/auth-layout';
 
 export default function ConfirmPassword() {
@@ -29,11 +30,11 @@ export default function ConfirmPassword() {
         >
             <Head title="Confirm password" />
 
-            <form onSubmit={submit}>
+            <Form onSubmit={submit}>
                 <div className="space-y-6">
                     <div className="grid gap-2">
                         <Label htmlFor="password">Password</Label>
-                        <Input
+                        <TextField
                             id="password"
                             type="password"
                             name="password"
@@ -41,20 +42,22 @@ export default function ConfirmPassword() {
                             autoComplete="current-password"
                             value={data.password}
                             autoFocus
-                            onChange={(e) => setData('password', e.target.value)}
+                            onChange={(value) => setData('password', value)}
+                            errorMessage={errors.password}
+                            aria-label="Password"
                         />
 
                         <InputError message={errors.password} />
                     </div>
 
                     <div className="flex items-center">
-                        <Button className="w-full" disabled={processing}>
+                        <Button className="w-full" isDisabled={processing} isPending={processing} type="submit">
                             {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                             Confirm password
                         </Button>
                     </div>
                 </div>
-            </form>
+            </Form>
         </AuthLayout>
     );
 }

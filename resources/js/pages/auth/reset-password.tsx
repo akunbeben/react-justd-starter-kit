@@ -2,10 +2,10 @@ import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
-import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { TextField } from '@/components/ui/text-field';
+import { Label } from '@/components/ui/field';
+import { Form } from '@/components/ui';
 import AuthLayout from '@/layouts/auth-layout';
 
 interface ResetPasswordProps {
@@ -39,26 +39,27 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
         <AuthLayout title="Reset password" description="Please enter your new password below">
             <Head title="Reset password" />
 
-            <form onSubmit={submit}>
+            <Form onSubmit={submit}>
                 <div className="grid gap-6">
                     <div className="grid gap-2">
                         <Label htmlFor="email">Email</Label>
-                        <Input
+                        <TextField
                             id="email"
                             type="email"
                             name="email"
                             autoComplete="email"
                             value={data.email}
                             className="mt-1 block w-full"
-                            readOnly
-                            onChange={(e) => setData('email', e.target.value)}
+                            isReadOnly
+                            onChange={(value) => setData('email', value)}
+                            errorMessage={errors.email}
+                            aria-label="Email Address"
                         />
-                        <InputError message={errors.email} className="mt-2" />
                     </div>
 
                     <div className="grid gap-2">
                         <Label htmlFor="password">Password</Label>
-                        <Input
+                        <TextField
                             id="password"
                             type="password"
                             name="password"
@@ -66,33 +67,35 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                             value={data.password}
                             className="mt-1 block w-full"
                             autoFocus
-                            onChange={(e) => setData('password', e.target.value)}
+                            onChange={(value) => setData('password', value)}
                             placeholder="Password"
+                            errorMessage={errors.password}
+                            aria-label="Password"
                         />
-                        <InputError message={errors.password} />
                     </div>
 
                     <div className="grid gap-2">
                         <Label htmlFor="password_confirmation">Confirm password</Label>
-                        <Input
+                        <TextField
                             id="password_confirmation"
                             type="password"
                             name="password_confirmation"
                             autoComplete="new-password"
                             value={data.password_confirmation}
                             className="mt-1 block w-full"
-                            onChange={(e) => setData('password_confirmation', e.target.value)}
+                            onChange={(value) => setData('password_confirmation', value)}
                             placeholder="Confirm password"
+                            errorMessage={errors.password_confirmation}
+                            aria-label="Password Confirmation"
                         />
-                        <InputError message={errors.password_confirmation} className="mt-2" />
                     </div>
 
-                    <Button type="submit" className="mt-4 w-full" disabled={processing}>
+                    <Button type="submit" className="mt-4 w-full" isDisabled={processing} isPending={processing}>
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Reset password
                     </Button>
                 </div>
-            </form>
+            </Form>
         </AuthLayout>
     );
 }
