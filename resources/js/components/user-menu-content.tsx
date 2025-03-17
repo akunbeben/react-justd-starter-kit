@@ -26,7 +26,7 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
 
             <Menu.Separator />
 
-            {/* @ts-ignore */}
+            {/* @ts-expect-error routerOptions */}
             <Menu.Item routerOptions={{ method: "post" }} href={route("logout")} onAction={cleanup}>
                 <IconLogout />
                 Log out

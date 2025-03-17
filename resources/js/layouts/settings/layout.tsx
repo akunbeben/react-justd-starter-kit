@@ -1,5 +1,5 @@
 import Heading from '@/components/heading';
-import { Button, buttonStyles } from '@/components/ui/button';
+import { buttonStyles } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { type NavItem } from '@/types';

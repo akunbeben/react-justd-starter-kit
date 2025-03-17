@@ -1,7 +1,6 @@
 import { Avatar } from '@/components/ui/avatar';
 import { useInitials } from '@/hooks/use-initials';
 import { type User } from '@/types';
-import { Button } from '@/components/ui/button';
 import { IconChevronsUpDown } from 'justd-icons';
 
 export function UserInfo({ user, showEmail = false, showIcon = false }: { user: User; showEmail?: boolean; showIcon?: boolean }) {
